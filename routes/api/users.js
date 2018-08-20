@@ -47,6 +47,7 @@ router.post('/register', (req, res) => {
         password: req.body.password,
       });
 
+      // * Generates a salt for the given password
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           if (err) throw err;
@@ -76,20 +77,25 @@ router.post('/login', (req, res) => {
   const password = req.body.password;
 
   // * Find user by email
-  User.findOne({ email: email }).then(user => {
+  User.findOne({ email }).then(user => {
     // Check for user
     if (!user) {
       errors.email = 'User not found!';
       return res.status(404).json(errors);
     }
-    // Check Password
+    // Check the given password with the saved hashed pw associated with the user
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         // User Matched
         // Create JWT Payload
         const payload = { id: user.id, name: user.name, avatar: user.avatar };
 
-        // Sign Token
+        /* Sign Token
+        https://github.com/auth0/node-jsonwebtoken
+        Payload = What we want to include in the token
+        Expiration = How long we want the token to last
+        Bearer = A common protocol 
+        */
         jwt.sign(
           payload,
           keys.secretOrKey,
