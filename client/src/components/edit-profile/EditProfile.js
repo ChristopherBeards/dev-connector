@@ -245,7 +245,7 @@ class EditProfile extends Component {
                   info="Please use values separated by a comma (eg: HTML,CSS,JavaScript,ReactJS)"
                 />
                 <TextFieldGroup
-                  placeholder="GItHub Username"
+                  placeholder="GitHub Username"
                   name="githubusername"
                   value={this.state.githubusername}
                   onChange={this.onChange}
