@@ -29,10 +29,14 @@ class Profile extends Component {
 
 Profile.propTypes = {
   profile: PropTypes.object.isRequired,
+  getProfileByHandle: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   profile: state.profile,
 });
 
-export default connect(mapStateToProps)(Profile);
+export default connect(
+  mapStateToProps,
+  { getProfileByHandle },
+)(Profile);
