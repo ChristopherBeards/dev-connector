@@ -98,6 +98,13 @@ export const setPostLoading = () => {
   };
 };
 
+// Clear Errors
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS,
+  };
+};
+
 // Delete Post
 export const deletePost = id => dispatch => {
   axios
