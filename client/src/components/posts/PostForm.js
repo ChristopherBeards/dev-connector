@@ -48,6 +48,7 @@ class PostForm extends Component {
                 <TextAreaFieldGroup
                   className="form-control form-control-lg"
                   placeholder="Create a post"
+                  name="text"
                   value={this.state.text}
                   onChange={this.onChange}
                   error={errors.text}
