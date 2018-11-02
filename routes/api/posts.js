@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
     .catch(err => res.status(404).json({ error: 'No posts found' }));
 });
 
-// * @route   GET api/posts
+// * @route   GET api/posts/:id
 // * @desc    Get post by id
 // * @access  Public
 router.get('/:id', (req, res) => {
@@ -107,7 +107,10 @@ router.post(
           // Add user id to likes array
           post.likes.unshift({ user: req.user.id });
 
-          post.save().then(post => res.status(200).json(post));
+          post.save().then(post => res.status(200).json(post))
+          .catch(err => {
+            res.status(400).json(err);
+          })
         })
         .catch(err => res.status(404).json({ postnotfound: 'No post found' }));
     });
@@ -173,7 +176,7 @@ router.post(
         };
 
         // Add to comments array
-        post.comments.unshift(newCommnet);
+        post.comments.unshift(newComment);
 
         // Save
         post.save().then(post => res.status(200).json(post));
