@@ -8,6 +8,8 @@ class CommentItem extends Component {
     this.props.deleteComment(postId, commentId);
   };
 
+  onEditClick = (postId) => {};
+
   render() {
     const { comment, postId, auth } = this.props;
 
@@ -28,13 +30,23 @@ class CommentItem extends Component {
           <div className="col-md-10">
             <p className="lead">{comment.text}</p>
             {comment.user === auth.user.id ? (
-              <button
-                onClick={this.onDeleteClick(postId, comment._id)}
-                type="button"
-                className="btn btn-danger mr-1"
-              >
-                <i className="fas fa-times" />
-              </button>
+              <React.Fragment>
+                <button
+                  onClick={this.onEditClick(postId)}
+                  type="button"
+                  className="btn mr-1"
+                  disabled
+                >
+                  <i class="fas fa-edit" />
+                </button>
+                <button
+                  onClick={this.onDeleteClick(postId, comment._id)}
+                  type="button"
+                  className="btn btn-danger mr-1"
+                >
+                  <i className="fas fa-times" />
+                </button>
+              </React.Fragment>
             ) : null}
           </div>
         </div>
