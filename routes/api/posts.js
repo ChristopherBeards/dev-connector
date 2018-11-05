@@ -58,7 +58,36 @@ router.post(
     });
 
     newPost.save().then(post => res.status(200).json(post));
-  },
+  }
+);
+
+// * @route   PUT api/posts/:id
+// * @desc    Edit post
+// * @access  Private
+router.put(
+  '/edit',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { id } = req.body;
+
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      if (!profile) {
+        res.status(404).json({
+          usernotfound: "We can't locate the user associated with this post...",
+        });
+      } else {
+        Post.findOneAndUpdate({ _id: id }, req.body, { new: true })
+          .then(updatedPost => {
+            res.status(200).json({ updatedPost });
+          })
+          .catch(err => {
+            res
+              .status(500)
+              .json({ error: 'Error communicating with the database.' });
+          });
+      }
+    });
+  }
 );
 
 // * @route   DELETE api/posts/:id
@@ -83,7 +112,7 @@ router.delete(
         })
         .catch(err => res.status(404).json({ postnotfound: 'No post found' }));
     });
-  },
+  }
 );
 
 // * @route   POST api/posts/like/:id
@@ -107,14 +136,16 @@ router.post(
           // Add user id to likes array
           post.likes.unshift({ user: req.user.id });
 
-          post.save().then(post => res.status(200).json(post))
-          .catch(err => {
-            res.status(400).json(err);
-          })
+          post
+            .save()
+            .then(post => res.status(200).json(post))
+            .catch(err => {
+              res.status(400).json(err);
+            });
         })
         .catch(err => res.status(404).json({ postnotfound: 'No post found' }));
     });
-  },
+  }
 );
 
 // * @route   POST api/posts/unlike/:id
@@ -148,7 +179,7 @@ router.post(
         })
         .catch(err => res.status(404).json({ postnotfound: 'No post found' }));
     });
-  },
+  }
 );
 
 // * @route   POST api/posts/comment/:id
@@ -182,7 +213,7 @@ router.post(
         post.save().then(post => res.status(200).json(post));
       })
       .catch(err => res.status(404).json({ postnotfound: 'No post found' }));
-  },
+  }
 );
 
 // * @route   DELETE api/posts/comment/:id/:comment_id
@@ -197,7 +228,7 @@ router.delete(
         // Check to see if comment exists
         if (
           post.comments.filter(
-            comment => comment._id.toString() === req.params.comment_id,
+            comment => comment._id.toString() === req.params.comment_id
           ).length === 0
         ) {
           return res
@@ -215,7 +246,7 @@ router.delete(
         post.save().then(post => res.status(200).json(post));
       })
       .catch(err => res.status(404).json({ postnotfound: 'No post found' }));
-  },
+  }
 );
 
 module.exports = router;
