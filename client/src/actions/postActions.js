@@ -68,25 +68,6 @@ export const getPost = id => dispatch => {
     );
 };
 
-// Edit Post
-export const editPost = id => dispatch => {
-  dispatch(setPostLoading());
-  axios
-    .get(`/api/posts/edit`)
-    .then(res =>
-      dispatch({
-        type: EDIT_POST,
-        payload: res.data,
-      })
-    )
-    .catch(
-      dispatch({
-        type: GET_POST,
-        payload: null,
-      })
-    );
-};
-
 // Add Like
 export const addLike = id => dispatch => {
   axios
@@ -160,6 +141,25 @@ export const addComment = (postId, commentData) => dispatch => {
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data,
+      })
+    );
+};
+
+// Edit Post
+export const editComment = id => dispatch => {
+  dispatch(setPostLoading());
+  axios
+    .get(`/api/posts/edit`)
+    .then(res =>
+      dispatch({
+        type: EDIT_POST,
+        payload: res.data,
+      })
+    )
+    .catch(
+      dispatch({
+        type: GET_POST,
+        payload: null,
       })
     );
 };
