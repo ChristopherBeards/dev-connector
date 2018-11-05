@@ -7,6 +7,7 @@ import {
   POST_LOADING,
   DELETE_POST,
   GET_POST,
+  EDIT_POST,
   CLEAR_ERRORS,
 } from './types';
 
@@ -19,13 +20,13 @@ export const addPost = postData => dispatch => {
       dispatch({
         type: ADD_POST,
         payload: res.data,
-      }),
+      })
     )
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data,
-      }),
+      })
     );
 };
 
@@ -38,13 +39,13 @@ export const getPosts = () => dispatch => {
       dispatch({
         type: GET_POSTS,
         payload: res.data,
-      }),
+      })
     )
     .catch(
       dispatch({
         type: GET_POSTS,
         payload: null,
-      }),
+      })
     );
 };
 
@@ -57,13 +58,32 @@ export const getPost = id => dispatch => {
       dispatch({
         type: GET_POST,
         payload: res.data,
-      }),
+      })
     )
     .catch(
       dispatch({
         type: GET_POST,
         payload: null,
-      }),
+      })
+    );
+};
+
+// Edit Post
+export const editPost = id => dispatch => {
+  dispatch(setPostLoading());
+  axios
+    .get(`/api/posts/edit`)
+    .then(res =>
+      dispatch({
+        type: EDIT_POST,
+        payload: res.data,
+      })
+    )
+    .catch(
+      dispatch({
+        type: GET_POST,
+        payload: null,
+      })
     );
 };
 
@@ -76,7 +96,7 @@ export const addLike = id => dispatch => {
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data,
-      }),
+      })
     );
 };
 
@@ -89,7 +109,7 @@ export const removeLike = id => dispatch => {
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data,
-      }),
+      })
     );
 };
 
@@ -115,13 +135,13 @@ export const deletePost = id => dispatch => {
       dispatch({
         type: DELETE_POST,
         payload: id,
-      }),
+      })
     )
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
-        payload: err.res.data,
-      }),
+        payload: err.response.data,
+      })
     );
 };
 
@@ -134,13 +154,13 @@ export const addComment = (postId, commentData) => dispatch => {
       dispatch({
         type: GET_POST,
         payload: res.data,
-      }),
+      })
     )
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data,
-      }),
+      })
     );
 };
 
@@ -152,12 +172,12 @@ export const deleteComment = (postId, commentId) => dispatch => {
       dispatch({
         type: GET_POST,
         payload: res.data,
-      }),
+      })
     )
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data,
-      }),
+      })
     );
 };
