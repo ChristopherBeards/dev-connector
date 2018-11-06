@@ -61,28 +61,44 @@ router.post(
   }
 );
 
-// * @route   PUT api/posts/:id
+// * @route   PUT api/posts/edit
 // * @desc    Edit post
 // * @access  Private
-router.put(
+router.post(
   '/edit',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    const { id } = req.body;
+    const { postId, text, commentId } = req.body;
 
+    // Confirm that the user exists
     Profile.findOne({ user: req.user.id }).then(profile => {
       if (!profile) {
         res.status(404).json({
           usernotfound: "We can't locate the user associated with this post...",
         });
       } else {
-        Post.findOneAndUpdate({ _id: id }, req.body, { new: true })
-          .then(updatedPost => {
-            res.status(200).json({ updatedPost });
+        // Locate the parent post
+        Post.findById(postId)
+          .then(post => {
+            // Filter to get the desired comment
+            let toUpdate = post.comments.filter(
+              comment => comment._id.toString() === commentId
+            )[0];
+
+            // Set the comments' text to the new version
+            toUpdate.text = text;
+
+            // Save the updated post
+            post
+              .save()
+              .then(updatedComment => {
+                res.status(201).json(updatedComment);
+              })
+              .catch({ error: 'Error updating the comment.' });
           })
           .catch(err => {
             res
-              .status(500)
+              .status(400)
               .json({ error: 'Error communicating with the database.' });
           });
       }
