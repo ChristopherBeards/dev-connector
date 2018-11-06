@@ -7,7 +7,7 @@ import {
   POST_LOADING,
   DELETE_POST,
   GET_POST,
-  EDIT_POST,
+  EDIT_COMMENT,
   CLEAR_ERRORS,
 } from './types';
 
@@ -145,20 +145,20 @@ export const addComment = (postId, commentData) => dispatch => {
     );
 };
 
-// Edit Post
-export const editComment = id => dispatch => {
+// Edit Post Comment
+export const editComment = postData => dispatch => {
   dispatch(setPostLoading());
   axios
-    .get(`/api/posts/edit`)
+    .post(`/api/posts/edit`, postData)
     .then(res =>
       dispatch({
-        type: EDIT_POST,
+        type: EDIT_COMMENT,
         payload: res.data,
       })
     )
     .catch(
       dispatch({
-        type: GET_POST,
+        type: GET_POSTS,
         payload: null,
       })
     );
