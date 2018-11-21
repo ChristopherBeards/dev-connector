@@ -149,7 +149,7 @@ export const addComment = (postId, commentData) => dispatch => {
 export const editComment = postData => dispatch => {
   dispatch(setPostLoading());
   axios
-    .post(`/api/posts/edit`, postData)
+    .post(`/api/posts/comment/edit`, postData)
     .then(res =>
       dispatch({
         type: EDIT_COMMENT,

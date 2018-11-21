@@ -4,9 +4,10 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
 
-const users = require('./routes/api/users');
-const profile = require('./routes/api/profile');
-const posts = require('./routes/api/posts');
+// * Route Imports
+const profileRoutes = require('./routes/profileRoutes');
+const userRoutes = require('./routes/userRoutes');
+const postRoutes = require('./routes/postRoutes');
 
 // * Initialze a Variable to Express
 const app = express();
@@ -34,9 +35,10 @@ require('./config/passport.js')(passport);
 const port = process.env.PORT || 5000;
 
 // * Use Routes
-app.use('/api/users', users);
-app.use('/api/profile', profile);
-app.use('/api/posts', posts);
+userRoutes(app, passport.authenticate('jwt', { session: false }));
+profileRoutes(app, passport.authenticate('jwt', { session: false }));
+postRoutes(app, passport.authenticate('jwt', { session: false }));
+
 
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {
@@ -50,3 +52,5 @@ if (process.env.NODE_ENV === 'production') {
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });
+
+module.exports = app;
